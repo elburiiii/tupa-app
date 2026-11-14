@@ -1,0 +1,85 @@
+/**
+ * English copy. This object defines the shape every translation must follow:
+ * fi.ts is type-checked against it, so a missing Finnish string is a build error.
+ */
+export const en = {
+  appName: 'Tupa',
+  loading: 'Loading…',
+  language: { label: 'Language', en: 'English', fi: 'Finnish' },
+  nav: { contracts: 'Contracts', upload: 'Upload', signOut: 'Sign out', main: 'Main menu' },
+  login: {
+    title: 'Sign in to Tupa',
+    intro: 'Enter your email and we’ll send you a sign-in link. No password needed.',
+    email: 'Email',
+    submit: 'Send sign-in link',
+    sending: 'Sending…',
+    sent: (email: string) => `Check your inbox: we sent a sign-in link to ${email}.`,
+    error: 'Could not send the link. Check the address and try again.',
+  },
+  upload: {
+    title: 'Upload a contract',
+    intro: 'Upload the contract document, then fill in its details.',
+    file: 'Document',
+    hint: 'PDF, JPG, PNG or HEIC, max 10 MB.',
+    submit: 'Upload',
+    uploading: 'Uploading…',
+    errorType: 'This file type is not supported. Use PDF, JPG, PNG or HEIC.',
+    errorSize: 'The file is larger than 10 MB.',
+    errorFailed: 'Upload failed. Try again.',
+    duplicate: 'You have already uploaded this file.',
+    useExisting: 'Add a contract for it',
+  },
+  form: {
+    title: 'Contract details',
+    document: 'Attached document',
+    noDocument: 'No document',
+    provider: 'Provider',
+    category: 'Category',
+    price: 'Price (€)',
+    pricePeriod: 'Price period',
+    termType: 'Contract type',
+    endDate: 'End date',
+    endDateHint: 'For auto-renewing contracts: the end of the current period.',
+    noticePeriod: 'Notice period (days)',
+    save: 'Save contract',
+    saving: 'Saving…',
+    required: 'Required',
+    error: 'Could not save the contract. Try again.',
+  },
+  categories: {
+    electricity: 'Electricity',
+    telecom: 'Mobile',
+    internet: 'Internet',
+    insurance: 'Insurance',
+    gym: 'Gym',
+    streaming: 'Streaming',
+    rent: 'Rent',
+    loan: 'Loan',
+    subscription: 'Subscription',
+    other: 'Other',
+  },
+  termTypes: {
+    fixed_term: 'Fixed-term',
+    open_ended: 'Open-ended',
+    auto_renewing: 'Auto-renewing',
+  },
+  pricePeriods: { month: 'per month', year: 'per year', one_off: 'one-off' },
+  contracts: {
+    title: 'Your contracts',
+    empty: 'No contracts yet. Upload your first contract to get started.',
+    add: 'Add contract',
+    loadError: 'Could not load contracts.',
+    nextDeadline: 'Next deadline',
+    noDeadline: 'No deadline',
+    overdue: 'Passed',
+    cancelAnytime: (days: number | null) =>
+      days == null ? 'Cancel anytime' : `Cancel anytime, ${days} days’ notice`,
+  },
+  limit: {
+    title: 'Free plan limit reached',
+    body: (limit: number) =>
+      `The free plan includes ${limit} contracts. Upgrade to track more — paid plans are coming soon.`,
+  },
+}
+
+export type Dictionary = typeof en

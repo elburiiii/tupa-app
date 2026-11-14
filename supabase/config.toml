@@ -1,0 +1,9 @@
+# Minimal local config for `supabase start`; unspecified settings use CLI defaults.
+project_id = "tupa-app"
+
+[auth]
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173", "http://127.0.0.1:5173"]
+
+[auth.email]
+enable_signup = true

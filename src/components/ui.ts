@@ -4,4 +4,6 @@ export const inputClass =
 export const labelClass = 'block text-sm font-medium text-ink-700'
 export const buttonClass =
   'inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-60'
+export const secondaryButtonClass =
+  'inline-flex items-center justify-center rounded-lg border border-line-strong bg-surface px-4 py-2 text-sm font-semibold text-ink-900 hover:bg-canvas'
 export const linkClass = 'font-medium text-accent underline underline-offset-2'

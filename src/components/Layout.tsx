@@ -14,7 +14,7 @@ export function Layout() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-line bg-surface">
-        <div className="mx-auto flex max-w-3xl items-center gap-6 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3">
           <span className="font-bold text-primary">{t.appName}</span>
           <nav aria-label={t.nav.main} className="flex gap-4">
             <NavLink to="/" end className={navClass}>{t.nav.contracts}</NavLink>
@@ -28,7 +28,7 @@ export function Layout() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-3xl px-4 py-8">
+      <main className="mx-auto max-w-6xl px-4 py-8">
         <Outlet />
       </main>
     </div>

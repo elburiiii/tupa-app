@@ -87,7 +87,7 @@ export function UploadPage() {
   if (atLimit === null) return <p className="text-ink-500">{t.loading}</p>
 
   return (
-    <section>
+    <section className="mx-auto max-w-3xl">
       <h1 className="text-2xl font-bold text-ink-950">{t.upload.title}</h1>
       <p className="mt-2 text-sm text-ink-500">{t.upload.intro}</p>
 
@@ -119,6 +119,13 @@ export function UploadPage() {
             {busy ? t.upload.uploading : t.upload.submit}
           </button>
         </form>
+      )}
+
+      {!atLimit && (
+        <p className="mt-8 text-sm text-ink-500">
+          {t.upload.noDocument}{' '}
+          <Link to="/contracts/new" className={linkClass}>{t.upload.addManually}</Link>
+        </p>
       )}
     </section>
   )

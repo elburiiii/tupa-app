@@ -12,6 +12,9 @@ export type TermType = (typeof TERM_TYPES)[number]
 export const PRICE_PERIODS = ['month', 'year', 'one_off'] as const
 export type PricePeriod = (typeof PRICE_PERIODS)[number]
 
+export const PRICE_TYPES = ['fixed', 'spot', 'variable'] as const
+export type PriceType = (typeof PRICE_TYPES)[number]
+
 export interface DocumentRow {
   id: string
   user_id: string
@@ -31,6 +34,10 @@ export interface ContractRow {
   document_id: string | null
   provider_name: string
   category: ContractCategory
+  price_type: PriceType
+  /** Spot-price margin in c/kWh; only for price_type 'spot'. */
+  spot_margin_cents_kwh: number | null
+  /** For 'spot': the monthly fee. */
   price_amount: number | null
   price_period: PricePeriod | null
   term_type: TermType

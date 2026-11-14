@@ -51,6 +51,11 @@ export function formatEuro(amount: number, lang: Language): string {
   return new Intl.NumberFormat(LOCALES[lang], { style: 'currency', currency: 'EUR' }).format(amount)
 }
 
+/** Formats a plain number with the language's decimal separator (0,49 vs 0.49). */
+export function formatNumber(value: number, lang: Language): string {
+  return new Intl.NumberFormat(LOCALES[lang], { maximumFractionDigits: 3 }).format(value)
+}
+
 /** Formats a YYYY-MM-DD date (14.11.2026 vs 14/11/2026) without time-zone shifts. */
 export function formatDate(isoDate: string, lang: Language): string {
   const [year, month, day] = isoDate.split('-').map(Number)

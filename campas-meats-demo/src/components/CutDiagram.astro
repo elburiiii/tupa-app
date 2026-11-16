@@ -1,0 +1,149 @@
+---
+/**
+ * Hand-drawn beef chart (SVG). Each region is a keyboard-focusable toggle button;
+ * a plain button list underneath offers the same choices with large tap targets.
+ * Text comes from content/cuts.json; products link here via #<cut-id>.
+ */
+import { UI, tr, href, fmtPrice, type Lang } from '../lib/i18n';
+import { cuts, products } from '../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const DEFAULT = 'shortloin';
+
+const BODY = 'M175 120 C240 100 330 92 420 96 C520 100 600 96 660 104 C705 110 728 140 730 185 C732 235 718 280 700 310 L640 318 C560 326 420 328 330 322 C270 318 225 312 200 300 C175 285 160 255 158 225 C156 195 160 150 175 120 Z';
+
+const regions: Record<string, { d: string[]; clip: boolean; label: [number, number]; size?: number }> = {
+  neck: { d: ['M140 80 L215 80 L215 235 L140 235 Z'], clip: true, label: [188, 180] },
+  chuck: { d: ['M215 80 L335 80 L335 235 L215 235 Z'], clip: true, label: [275, 165] },
+  rib: { d: ['M335 80 L440 80 L440 215 L335 215 Z'], clip: true, label: [387, 160] },
+  shortloin: { d: ['M440 80 L545 80 L545 215 L440 215 Z'], clip: true, label: [492, 155] },
+  sirloin: { d: ['M545 80 L625 80 L625 225 L545 225 Z'], clip: true, label: [585, 160], size: 13 },
+  round: { d: ['M625 80 L760 80 L760 340 L625 340 Z'], clip: true, label: [675, 215] },
+  brisket: { d: ['M140 235 L335 235 L335 340 L140 340 Z'], clip: true, label: [250, 280] },
+  plate: { d: ['M335 215 L485 215 L485 340 L335 340 Z'], clip: true, label: [410, 280] },
+  flank: { d: ['M485 215 L545 215 L545 225 L625 225 L625 340 L485 340 Z'], clip: true, label: [560, 290] },
+  tenderloin: { d: ['M462 207 C505 197 580 201 618 214 C582 230 505 232 462 222 Z'], clip: false, label: [540, 219], size: 11 },
+  shank: {
+    d: ['M206 298 L252 312 L247 400 L251 432 L221 432 L221 400 Z', 'M650 316 L702 306 L697 400 L703 432 L672 432 L669 400 Z'],
+    clip: false, label: [236, 455],
+  },
+};
+const ORDER = ['neck', 'chuck', 'rib', 'shortloin', 'sirloin', 'round', 'brisket', 'plate', 'flank', 'shank', 'tenderloin'];
+const short = (s: string) => s.replace(/\s*\(.*\)$/, '');
+const byId = Object.fromEntries(cuts.map((c) => [c.id, c]));
+---
+<div class="grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:items-start" data-cut-app>
+  <div>
+    <svg viewBox="30 60 740 405" class="h-auto w-full" role="group" aria-labelledby="cut-svg-title">
+      <title id="cut-svg-title">{lang === 'fi' ? 'Naudan leikkauskaavio. Valitse osa nähdäksesi tiedot.' : 'Beef cut chart. Choose a section to see details.'}</title>
+      <defs>
+        <clipPath id="body-clip"><path d={BODY} /></clipPath>
+        <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0 V8" stroke="#5a1a1f" stroke-opacity=".18" stroke-width="2"/></pattern>
+      </defs>
+      <!-- far-side legs and tail (decorative) -->
+      <g aria-hidden="true" fill="url(#hatch)" stroke="#5a1a1f" stroke-width="2">
+        <path d="M262 316 L300 320 L296 430 L268 430 Z" />
+        <path d="M612 318 L646 316 L642 430 L614 430 Z" />
+        <path d="M726 150 C752 190 750 260 744 300" fill="none" stroke-width="4" stroke-linecap="round" />
+        <path d="M744 296 C734 312 736 330 746 334 C756 328 756 310 744 296 Z" fill="#5a1a1f" />
+      </g>
+      <!-- head (decorative) -->
+      <g aria-hidden="true" stroke="#5a1a1f" stroke-width="2" fill="#f5eee1">
+        <path d="M128 92 C116 74 104 70 92 74 C104 80 112 88 118 98 Z" fill="#ebe1cf" />
+        <path d="M180 124 C152 110 122 98 94 102 L62 110 C46 114 38 132 42 148 C48 166 70 174 92 170 C122 178 150 202 162 220 Z" />
+        <path d="M118 104 C134 90 150 92 160 104 C146 108 132 110 118 104 Z" fill="#ebe1cf" />
+        <circle cx="96" cy="124" r="3.5" fill="#5a1a1f" stroke="none" />
+        <circle cx="52" cy="140" r="2.5" fill="#5a1a1f" stroke="none" />
+      </g>
+
+      {ORDER.map((id) => {
+        const r = regions[id];
+        const c = byId[id];
+        if (!c) return null;
+        return (
+          <g class="cut-region" data-cut={id} role="button" tabindex="0" aria-pressed={id === DEFAULT ? 'true' : 'false'}
+            aria-label={tr(c, 'name', lang)} clip-path={r.clip ? 'url(#body-clip)' : undefined}
+            stroke-dasharray={id === 'tenderloin' ? '6 4' : undefined}>
+            {r.d.map((d) => <path d={d} />)}
+          </g>
+        );
+      })}
+      <!-- body outline on top so the silhouette reads cleanly -->
+      <path d={BODY} fill="none" stroke="#5a1a1f" stroke-width="3.5" aria-hidden="true" pointer-events="none" />
+      <g aria-hidden="true">
+        {ORDER.map((id) => byId[id] && (
+          <text class:list={['cut-label', id === DEFAULT && 'is-active']} data-cut-label={id} x={regions[id].label[0]} y={regions[id].label[1]} font-size={regions[id].size ?? 15}>
+            {short(tr(byId[id], 'name', lang))}
+          </text>
+        ))}
+      </g>
+    </svg>
+
+    <fieldset class="mt-6">
+      <legend class="eyebrow mb-3 text-ink-muted">{lang === 'fi' ? 'Tai valitse listasta' : 'Or pick from the list'}</legend>
+      <div class="flex flex-wrap gap-2">
+        {ORDER.map((id) => byId[id] && (
+          <button type="button" data-cut-btn={id} aria-pressed={id === DEFAULT ? 'true' : 'false'}
+            class="min-h-11 border-2 border-oxblood px-3 text-[0.9375rem] font-semibold text-oxblood aria-pressed:bg-oxblood aria-pressed:text-cream">
+            {short(tr(byId[id], 'name', lang))}
+          </button>
+        ))}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="lg:sticky lg:top-6" aria-live="polite">
+    {ORDER.map((id) => {
+      const c = byId[id];
+      if (!c) return null;
+      const related = products.filter((p) => p.cut === id);
+      return (
+        <section data-cut-panel={id} hidden={id !== DEFAULT} id={id} aria-labelledby={`cut-h-${id}`}
+          class="border-2 border-oxblood bg-cream p-6 shadow-[6px_6px_0_rgb(90_26_31/0.18)] sm:p-8">
+          <p class="eyebrow text-ink-muted">{lang === 'fi' ? 'Amerikkalainen nimi' : 'US name'}: {c.us_name}</p>
+          <h2 id={`cut-h-${id}`} class="mt-2 text-4xl text-oxblood">{tr(c, 'name', lang)}</h2>
+          <hr class="rule-double my-5 text-oxblood" />
+          <p class="text-lg">{tr(c, 'body', lang)}</p>
+          <p class="eyebrow mt-6 text-ink-muted">{lang === 'fi' ? 'Parhaimmillaan' : 'Best for'}</p>
+          <p class="mt-1 font-serif text-xl">{tr(c, 'best', lang)}</p>
+          {related.length > 0 && (
+            <div class="mt-6 border-t border-oxblood/20 pt-4">
+              <p class="eyebrow text-ink-muted">{lang === 'fi' ? 'Kaupassa nyt' : 'In the shop'}</p>
+              <ul class="mt-2 space-y-1">
+                {related.map((p) => <li><a class="font-semibold text-oxblood underline" href={`${href('shop', lang)}#product-${p.id}`}>{tr(p, 'name', lang)}</a> <span class="text-ink-muted tabular-nums">· {fmtPrice(p.price, lang)}{p.price_unit === 'kg' ? t.perKg : t.perPkg}</span></li>)}
+              </ul>
+            </div>
+          )}
+        </section>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  const app = document.querySelector('[data-cut-app]');
+  if (app) {
+    const select = (id: string, focusPanel = false) => {
+      if (!app.querySelector(`[data-cut-panel="${id}"]`)) return;
+      app.querySelectorAll<HTMLElement>('[data-cut]').forEach((g) => g.setAttribute('aria-pressed', String(g.dataset.cut === id)));
+      app.querySelectorAll<HTMLElement>('[data-cut-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cutBtn === id)));
+      app.querySelectorAll<HTMLElement>('[data-cut-label]').forEach((l) => l.classList.toggle('is-active', l.dataset.cutLabel === id));
+      app.querySelectorAll<HTMLElement>('[data-cut-panel]').forEach((p) => (p.hidden = p.dataset.cutPanel !== id));
+      if (focusPanel && window.matchMedia('(max-width: 1023px)').matches) {
+        app.querySelector(`[data-cut-panel="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    };
+    app.addEventListener('click', (e) => {
+      const el = (e.target as Element).closest<HTMLElement>('[data-cut],[data-cut-btn]');
+      if (el) select(el.dataset.cut || el.dataset.cutBtn!, true);
+    });
+    app.addEventListener('keydown', (e) => {
+      const el = (e.target as Element).closest<HTMLElement>('[data-cut]');
+      if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); select(el.dataset.cut!, true); }
+    });
+    const fromHash = () => { const id = location.hash.slice(1); if (id) select(id); };
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+  }
+</script>

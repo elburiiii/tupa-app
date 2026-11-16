@@ -1,0 +1,7 @@
+{
+  "_help": "THE ONE shop-status switch. Set state to exactly one of: \"open\", \"sold-out\", \"closed\". For \"sold-out\", also set until (YYYY-MM-DD): the shop switches back to open automatically on that date. note_fi / note_en are optional one-line extras.",
+  "state": "open",
+  "until": "",
+  "note_fi": "",
+  "note_en": ""
+}

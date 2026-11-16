@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+import { ROUTES, UI, type Lang, type RouteKey } from '../lib/i18n';
+import { status, effectiveStatus, BUILD_DAY } from '../lib/content';
+import Header from '../components/Header.astro';
+import Notices from '../components/Notices.astro';
+import Footer from '../components/Footer.astro';
+import DemoBanner from '../components/DemoBanner.astro';
+import CartDialog from '../components/CartDialog.astro';
+
+interface Props { lang: Lang; routeKey: RouteKey; title: string; description: string }
+const { lang, routeKey, title, description } = Astro.props;
+const fullTitle = routeKey === 'home' ? `Campas Meats – ${title}` : `${title} – Campas Meats`;
+const other: Lang = lang === 'fi' ? 'en' : 'fi';
+const base = 'https://example.invalid';
+---
+<!doctype html>
+<html lang={lang} data-shop={effectiveStatus(BUILD_DAY)} data-shop-state={status.state} data-shop-until={status.until} data-build-day={BUILD_DAY}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Concept demo: never index. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'fi' ? 'fi_FI' : 'en_GB'} />
+    <meta property="og:locale:alternate" content={other === 'fi' ? 'fi_FI' : 'en_GB'} />
+    <link rel="alternate" hreflang={lang} href={base + ROUTES[routeKey][lang]} />
+    <link rel="alternate" hreflang={other} href={base + ROUTES[routeKey][other]} />
+    <link rel="alternate" hreflang="x-default" href={base + ROUTES[routeKey].fi} />
+    <meta name="theme-color" content="#5a1a1f" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Apply the demo-tool overrides before first paint so nothing flickers.
+      try {
+        var s = sessionStorage.getItem('campas-demo-status');
+        if (s) document.documentElement.dataset.shop = s;
+      } catch (e) {}
+    </script>
+  </head>
+  <body class="pb-24 sm:pb-16">
+    <Header lang={lang} routeKey={routeKey} />
+    <Notices lang={lang} />
+    <main id="main" tabindex="-1" class="focus:outline-none">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <DemoBanner lang={lang} />
+    <CartDialog lang={lang} />
+    <script>
+      // Order matters: cart listens for the refresh event that freshness fires.
+      import '../scripts/cart';
+      import '../scripts/menu';
+      import '../scripts/freshness';
+    </script>
+  </body>
+</html>

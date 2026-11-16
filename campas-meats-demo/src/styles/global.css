@@ -1,0 +1,152 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/source-sans-3';
+
+@theme {
+  --font-serif: 'Fraunces Variable', 'Georgia', serif;
+  --font-sans: 'Source Sans 3 Variable', system-ui, sans-serif;
+
+  --color-oxblood: #5a1a1f;
+  --color-oxblood-700: #6e2329;
+  --color-oxblood-900: #3a0f13;
+  --color-charcoal: #1e1a19;
+  --color-charcoal-800: #2a2523;
+  --color-cream: #f5eee1;
+  --color-paper: #ebe1cf;
+  --color-ink: #2a2421;
+  --color-ink-muted: #5c524b;
+  --color-brass: #9a7440;
+  --color-brass-light: #d9bf8f;
+  --color-ok: #2d5a37;
+  --color-warn: #7a4a06;
+}
+
+@custom-variant dark-surface (&:where(.on-dark, .on-dark *));
+
+@layer base {
+  html {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    min-height: 100dvh;
+    /* Butcher-paper grain: an inline SVG noise tile, very faint. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.25 0 0 0 0 0.18 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-optical-sizing: auto;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+
+  /* Visible focus everywhere: a thick ring that reads on cream and on dark panels. */
+  :focus-visible {
+    outline: 3px solid var(--color-oxblood);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .on-dark :focus-visible { outline-color: var(--color-brass-light); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .rule-double {
+    border: 0;
+    border-top: 4px double currentColor;
+    opacity: 0.55;
+  }
+  .container-x { width: 100%; max-width: 72rem; margin-inline: auto; padding-inline: 1.25rem; }
+  @media (min-width: 640px) { .container-x { padding-inline: 2rem; } }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    min-height: 2.75rem; padding: 0.6rem 1.25rem;
+    font-weight: 650; letter-spacing: 0.04em;
+    border: 2px solid var(--color-oxblood);
+    background: var(--color-oxblood); color: var(--color-cream);
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn:hover { background: var(--color-oxblood-900); border-color: var(--color-oxblood-900); }
+  .btn-ghost { background: transparent; color: var(--color-oxblood); }
+  .btn-ghost:hover { background: var(--color-oxblood); color: var(--color-cream); }
+  .btn:disabled, .btn[aria-disabled='true'] {
+    background: transparent; color: var(--color-ink-muted); border-color: currentColor; border-style: dashed; cursor: not-allowed;
+  }
+  .on-dark .btn-ghost { color: var(--color-cream); border-color: var(--color-brass-light); }
+  .on-dark .btn-ghost:hover { background: var(--color-brass-light); color: var(--color-charcoal); }
+
+  /* Rubber-stamp badge for stock and status. */
+  .stamp {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.15rem 0.55rem;
+    border: 2px solid currentColor; border-radius: 3px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    line-height: 1.4; white-space: nowrap;
+  }
+  .stamp-ok { color: var(--color-ok); }
+  .stamp-warn { color: var(--color-warn); }
+  .stamp-out { color: var(--color-oxblood); transform: rotate(-2deg); }
+
+  .tag-example {
+    display: inline-block; padding: 0.05rem 0.4rem;
+    border: 1px dashed currentColor; border-radius: 2px;
+    font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+  .on-dark .tag-example { color: var(--color-brass-light); }
+
+  /* Placeholder image block: hatched, with a shot-list caption. */
+  .img-ph {
+    position: relative; display: flex; align-items: flex-end;
+    background-color: var(--color-paper);
+    background-image: repeating-linear-gradient(135deg, rgb(90 26 31 / 0.07) 0 2px, transparent 2px 12px);
+    border: 1px solid rgb(90 26 31 / 0.25);
+    color: var(--color-ink-muted);
+  }
+  .img-ph figcaption { padding: 0.75rem 0.9rem; font-size: 0.875rem; line-height: 1.35; }
+  .img-ph .img-ph-kind { display: block; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-oxblood); margin-bottom: 0.15rem; }
+
+  .prose-campas h2 { font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 0.75rem; color: var(--color-oxblood); }
+  .prose-campas p { margin-bottom: 1rem; max-width: 62ch; }
+  .prose-campas strong { font-weight: 650; }
+}
+
+/* ---------- Shop status: exactly one view is ever visible. ---------- */
+[data-status-view] { display: none; }
+html[data-shop='open'] [data-status-view~='open'],
+html[data-shop='sold-out'] [data-status-view~='sold-out'],
+html[data-shop='closed'] [data-status-view~='closed'] { display: revert; }
+html[data-shop='open'] [data-status-view~='open'].flex-view,
+html[data-shop='sold-out'] [data-status-view~='sold-out'].flex-view,
+html[data-shop='closed'] [data-status-view~='closed'].flex-view { display: flex; }
+
+/* Expired / not-yet-started items. */
+[hidden] { display: none !important; }
+
+/* Cut diagram */
+.cut-region { cursor: pointer; transition: fill 0.15s; fill: var(--color-cream); stroke: var(--color-oxblood); stroke-width: 2; }
+.cut-region:hover { fill: #efd9cf; }
+.cut-region[aria-pressed='true'] { fill: var(--color-oxblood); }
+.cut-region:focus { outline: none; }
+.cut-region:focus-visible { stroke: var(--color-charcoal); stroke-width: 5; }
+.cut-label { pointer-events: none; font-family: var(--font-serif); font-size: 15px; fill: var(--color-oxblood); text-anchor: middle; }
+.cut-label.is-active { fill: var(--color-cream); }

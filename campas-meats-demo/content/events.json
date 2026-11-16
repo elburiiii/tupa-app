@@ -1,0 +1,69 @@
+{
+  "_help": "Markets and pop-ups. date is YYYY-MM-DD; end_date is optional for multi-day events. Times are 24-hour HH:MM. Past events hide automatically; the soonest upcoming one appears on the home page.",
+  "events": [
+    {
+      "id": "tampere-popup-feb-2026",
+      "date": "2026-02-14",
+      "end_date": "",
+      "start_time": "11:00",
+      "end_time": "16:00",
+      "kind": "popup",
+      "title_fi": "Pop-up Tampereella",
+      "title_en": "Tampere pop-up",
+      "venue": "[venue]",
+      "city": "Tampere",
+      "map_url": "",
+      "body_fi": "Makkaroita ja pihvejä suoraan tiskiltä.",
+      "body_en": "Sausages and steaks straight from the counter.",
+      "is_example": true
+    },
+    {
+      "id": "tampere-popup-nov-2026",
+      "date": "2026-11-28",
+      "end_date": "",
+      "start_time": "11:00",
+      "end_time": "16:00",
+      "kind": "popup",
+      "title_fi": "Pop-up Tampereella",
+      "title_en": "Tampere pop-up",
+      "venue": "[venue]",
+      "city": "Tampere",
+      "map_url": "",
+      "body_fi": "Ennakkotilaukset voi noutaa pop-upista. Tervetuloa maistelemaan!",
+      "body_en": "Pre-orders can be collected at the pop-up. Come by for a taste!",
+      "is_example": true
+    },
+    {
+      "id": "salo-christmas-market-2026",
+      "date": "2026-12-12",
+      "end_date": "2026-12-13",
+      "start_time": "10:00",
+      "end_time": "16:00",
+      "kind": "market",
+      "title_fi": "Joulumarkkinat",
+      "title_en": "Christmas market",
+      "venue": "[market name]",
+      "city": "Salo",
+      "map_url": "",
+      "body_fi": "Joulumakkarat, lahjalaatikot ja ennakkotilausten nouto.",
+      "body_en": "Christmas sausages, gift boxes and pre-order pickup.",
+      "is_example": true
+    },
+    {
+      "id": "tampere-popup-jan-2027",
+      "date": "2027-01-23",
+      "end_date": "",
+      "start_time": "11:00",
+      "end_time": "16:00",
+      "kind": "popup",
+      "title_fi": "Pop-up Tampereella",
+      "title_en": "Tampere pop-up",
+      "venue": "[venue]",
+      "city": "Tampere",
+      "map_url": "",
+      "body_fi": "Talven grillipihvit ja uudet makkaramaut.",
+      "body_en": "Winter grilling steaks and new sausage flavours.",
+      "is_example": true
+    }
+  ]
+}

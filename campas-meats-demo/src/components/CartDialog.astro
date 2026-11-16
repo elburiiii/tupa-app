@@ -1,0 +1,37 @@
+---
+/**
+ * Fake cart drawer. Contents live in localStorage; nothing leaves the browser.
+ * The product catalogue is embedded as JSON so the cart can show names/prices in the page language.
+ */
+import { UI, href, tr, fmtWeight, type Lang } from '../lib/i18n';
+import { products } from '../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const catalog = Object.fromEntries(
+  products.map((p) => [p.id, { name: tr(p, 'name', lang), price: p.price, unit: p.price_unit, weight: fmtWeight(p.weight_min_g, p.weight_max_g, lang), min: p.weight_min_g, max: p.weight_max_g, stock: p.stock }]),
+);
+const strings = { empty: t.cartEmpty, remove: t.cartRemove, qty: t.cartQty, perKg: t.perKg, perPkg: t.perPkg, lang };
+---
+<dialog id="cart-dialog" aria-labelledby="cart-title"
+  class="m-0 ml-auto h-dvh max-h-dvh w-full max-w-md bg-cream p-0 text-ink backdrop:bg-charcoal/60">
+  <div class="flex h-full flex-col">
+    <div class="flex items-center justify-between border-b-4 border-double border-oxblood/50 px-5 py-4">
+      <h2 id="cart-title" class="text-2xl text-oxblood">{t.cart}</h2>
+      <button type="button" data-cart-close class="flex h-11 w-11 items-center justify-center text-2xl" aria-label={t.close}>×</button>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-4">
+      <ul data-cart-lines class="divide-y divide-oxblood/15"></ul>
+      <p data-cart-empty class="py-8 text-ink-muted">{t.cartEmpty}</p>
+    </div>
+    <div class="border-t border-oxblood/20 px-5 pb-20 pt-4">
+      <p class="flex justify-between font-semibold"><span>{t.cartTotal}</span><span data-cart-total class="tabular-nums">€XX</span></p>
+      <p class="mt-1 text-sm text-ink-muted">{lang === 'fi' ? 'Lopullinen hinta punnitaan pakkauksen mukaan.' : 'Final price is by weight of each pack.'}</p>
+      <div class="mt-4 grid gap-2">
+        <a href={href('checkout', lang)} data-checkout-link class="btn no-underline">{t.toCheckout}</a>
+        <button type="button" data-cart-close class="btn btn-ghost">{t.continueShopping}</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+<script type="application/json" id="cart-catalog" set:html={JSON.stringify({ catalog, strings })} />

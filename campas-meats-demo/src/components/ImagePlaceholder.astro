@@ -1,0 +1,13 @@
+---
+/**
+ * Stand-in for a real photo. The caption doubles as a shot list for the owners.
+ * role="img" + aria-label gives screen readers the same description sighted users see.
+ */
+import { UI, type Lang } from '../lib/i18n';
+interface Props { label: string; lang: Lang; class?: string; aspect?: string }
+const { label, lang, class: cls = '', aspect = 'aspect-[4/3]' } = Astro.props;
+---
+<figure class:list={['img-ph', aspect, cls]} role="img" aria-label={label}>
+  <svg aria-hidden="true" class="absolute right-3 top-3 h-6 w-6 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="13" rx="1"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+  <figcaption aria-hidden="true"><span class="img-ph-kind">{UI[lang].imagePlaceholder}</span>{label}</figcaption>
+</figure>

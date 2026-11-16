@@ -1,0 +1,102 @@
+# Pages CMS (https://pagescms.org) — a free, git-based editor: owners sign in with GitHub
+# and edit these files through forms; every save is a commit, which triggers a rebuild.
+# STARTING POINT for the pitch: check field options against the Pages CMS docs before going live.
+# If this demo lives in a subfolder of a repo, keep the "campas-meats-demo/" prefix on paths;
+# if it becomes its own repo, remove the prefix.
+content:
+  - name: status
+    label: "Myymälän tila / Shop status"
+    type: file
+    path: campas-meats-demo/content/status.json
+    fields:
+      - { name: state, label: "Tila / State", type: select, options: { values: [open, sold-out, closed] } }
+      - { name: until, label: "Loppuunmyyty asti (YYYY-MM-DD) / Sold out until", type: string }
+      - { name: note_fi, label: "Lisätieto (FI)", type: string }
+      - { name: note_en, label: "Extra note (EN)", type: string }
+
+  - name: notices
+    label: "Tiedotteet / Notices"
+    type: file
+    path: campas-meats-demo/content/notices.json
+    fields:
+      - name: notices
+        label: "Tiedotteet"
+        type: object
+        list: true
+        fields:
+          - { name: id, label: "Tunniste / ID", type: string }
+          - { name: type, label: "Tyyppi / Type", type: select, options: { values: [hours, popup, stock, info] } }
+          - { name: start, label: "Alkaa / Start", type: date }
+          - { name: end, label: "Päättyy / End", type: date }
+          - { name: title_fi, label: "Otsikko (FI)", type: string }
+          - { name: title_en, label: "Title (EN)", type: string }
+          - { name: body_fi, label: "Teksti (FI)", type: text }
+          - { name: body_en, label: "Text (EN)", type: text }
+          - { name: link, label: "Linkki sivulle / Link", type: select, options: { values: ["", shop, events, contact, delivery, cuts, story] } }
+          - { name: is_example, label: "Esimerkki / Example", type: boolean }
+
+  - name: events
+    label: "Tapahtumat / Events"
+    type: file
+    path: campas-meats-demo/content/events.json
+    fields:
+      - name: events
+        label: "Tapahtumat"
+        type: object
+        list: true
+        fields:
+          - { name: id, label: "Tunniste / ID", type: string }
+          - { name: date, label: "Päivä / Date", type: date }
+          - { name: end_date, label: "Viimeinen päivä (valinnainen) / Last day", type: string }
+          - { name: start_time, label: "Alkaa klo (HH:MM)", type: string }
+          - { name: end_time, label: "Päättyy klo (HH:MM)", type: string }
+          - { name: kind, label: "Laji / Kind", type: select, options: { values: [market, popup, tasting, other] } }
+          - { name: title_fi, label: "Nimi (FI)", type: string }
+          - { name: title_en, label: "Name (EN)", type: string }
+          - { name: venue, label: "Paikka / Venue", type: string }
+          - { name: city, label: "Kaupunki / City", type: string }
+          - { name: map_url, label: "Karttalinkki / Map link", type: string }
+          - { name: body_fi, label: "Kuvaus (FI)", type: text }
+          - { name: body_en, label: "Description (EN)", type: text }
+          - { name: is_example, label: "Esimerkki / Example", type: boolean }
+
+  - name: products
+    label: "Tuotteet / Products"
+    type: file
+    path: campas-meats-demo/content/products.json
+    fields:
+      - name: products
+        label: "Tuotteet"
+        type: object
+        list: true
+        fields:
+          - { name: id, label: "Tunniste / ID", type: string }
+          - { name: category, label: "Ryhmä / Category", type: select, options: { values: [steaks, sausages, selections, boxes] } }
+          - { name: name_fi, label: "Nimi (FI)", type: string }
+          - { name: name_en, label: "Name (EN)", type: string }
+          - { name: desc_fi, label: "Kuvaus (FI)", type: text }
+          - { name: desc_en, label: "Description (EN)", type: text }
+          - { name: price, label: "Hinta € / Price €", type: number }
+          - { name: price_unit, label: "Yksikkö / Unit", type: select, options: { values: [kg, pkg] } }
+          - { name: weight_min_g, label: "Paino min (g)", type: number }
+          - { name: weight_max_g, label: "Paino max (g)", type: number }
+          - { name: stock, label: "Varasto / Stock", type: select, options: { values: [in-stock, low, sold-out] } }
+          - { name: cut, label: "Leikkaus kaaviossa / Cut", type: string }
+          - { name: image_label_fi, label: "Kuvan kuvaus (FI)", type: string }
+          - { name: image_label_en, label: "Image description (EN)", type: string }
+          - { name: is_example, label: "Esimerkki / Example", type: boolean }
+
+  - name: hours
+    label: "Aukioloajat / Opening hours"
+    type: file
+    path: campas-meats-demo/content/hours.json
+
+  - name: story
+    label: "Tarinamme / Our story"
+    type: collection
+    path: campas-meats-demo/content/pages
+    fields:
+      - { name: title, label: "Otsikko / Title", type: string }
+      - { name: description, label: "Kuvaus hakukoneille / Meta description", type: string }
+      - { name: lead, label: "Ingressi / Lead", type: string }
+      - { name: body, label: "Teksti / Body", type: rich-text }

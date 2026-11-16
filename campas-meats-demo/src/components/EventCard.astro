@@ -1,0 +1,27 @@
+---
+import { UI, tr, fmtDate, fmtTimeRange, type Lang } from '../lib/i18n';
+import { eventEnd, type EventItem } from '../lib/content';
+interface Props { e: EventItem; lang: Lang; large?: boolean; hidden?: boolean }
+const { e, lang, large = false, hidden = false } = Astro.props;
+const t = UI[lang];
+const d = new Date(e.date + 'T12:00:00Z');
+const day = d.getUTCDate();
+const mon = new Intl.DateTimeFormat(lang === 'fi' ? 'fi-FI' : 'en-GB', { month: 'short', timeZone: 'UTC' }).format(d).replace('.', '');
+const kind = { market: lang === 'fi' ? 'Markkinat' : 'Market', popup: 'Pop-up', tasting: lang === 'fi' ? 'Maistelu' : 'Tasting', other: lang === 'fi' ? 'Tapahtuma' : 'Event' }[e.kind];
+const dateText = e.end_date ? `${fmtDate(e.date, lang)} – ${fmtDate(e.end_date, lang)}` : fmtDate(e.date, lang);
+---
+<article data-expires={eventEnd(e)} hidden={hidden} class:list={['flex gap-5 border-t-2 border-oxblood/30 py-6', large && 'gap-6']} aria-labelledby={`ev-${e.id}${large ? '-next' : ''}`}>
+  <div aria-hidden="true" class:list={['flex shrink-0 flex-col items-center justify-center border-2 border-oxblood text-oxblood', large ? 'h-24 w-20' : 'h-20 w-16']}>
+    <span class:list={['font-serif font-bold leading-none', large ? 'text-4xl' : 'text-3xl']}>{day}</span>
+    <span class="eyebrow mt-1 !text-[0.6875rem]">{mon}</span>
+  </div>
+  <div class="min-w-0">
+    <p class="eyebrow text-oxblood">{kind} · {e.city}</p>
+    <h3 id={`ev-${e.id}${large ? '-next' : ''}`} class:list={['mt-1 text-ink', large ? 'text-3xl' : 'text-2xl']}>{tr(e, 'title', lang)}</h3>
+    <p class="mt-2 font-semibold"><time datetime={e.date}>{dateText}</time>{e.start_time && <>, <span class="tabular-nums">{fmtTimeRange(e.start_time, e.end_time, lang)}</span></>}</p>
+    <p class="text-ink-muted">{e.venue}, {e.city}</p>
+    <p class="mt-2">{tr(e, 'body', lang)}</p>
+    {e.map_url && <a class="mt-2 inline-block font-semibold text-oxblood underline" href={e.map_url} target="_blank" rel="noopener">{t.openMap}<span class="sr-only"> {t.opensNewTab}</span></a>}
+    {e.is_example && <p class="mt-3"><span class="tag-example">{t.example}</span></p>}
+  </div>
+</article>

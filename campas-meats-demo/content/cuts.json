@@ -1,0 +1,115 @@
+{
+  "_help": "Text for the interactive beef cut diagram. id must match a region in the drawing (neck, chuck, rib, shortloin, tenderloin, sirloin, round, brisket, plate, flank, shank). Edit names and text freely.",
+  "cuts": [
+    {
+      "id": "neck",
+      "name_fi": "Niska",
+      "name_en": "Neck",
+      "us_name": "Neck",
+      "body_fi": "Paljon sidekudosta ja makua. Pehmenee pitkässä haudutuksessa.",
+      "body_en": "Lots of connective tissue and flavour. Turns tender with long braising.",
+      "best_fi": "Haudutus, keitot, jauheliha",
+      "best_en": "Braising, soups, grinding"
+    },
+    {
+      "id": "chuck",
+      "name_fi": "Lapa",
+      "name_en": "Chuck",
+      "us_name": "Chuck",
+      "body_fi": "Lihaksikas ja maukas etuneljännes. Burgerijauhelihan ja padan perusta.",
+      "body_en": "Hard-working, flavourful forequarter. The backbone of a good burger grind and pot roast.",
+      "best_fi": "Patapaisti, jauheliha, pulled beef",
+      "best_en": "Pot roast, burger grind, pulled beef"
+    },
+    {
+      "id": "rib",
+      "name_fi": "Etuselkä (entrecôte)",
+      "name_en": "Rib",
+      "us_name": "Rib / Ribeye",
+      "body_fi": "Ribeyen koti. Runsas marmorointi tekee siitä mehevän ja anteeksiantavan.",
+      "body_en": "Home of the ribeye. Generous marbling makes it juicy and forgiving.",
+      "best_fi": "Ribeye, tomahawk, rib roast",
+      "best_en": "Ribeye, tomahawk, standing rib roast"
+    },
+    {
+      "id": "shortloin",
+      "name_fi": "Ulkofilee",
+      "name_en": "Short loin",
+      "us_name": "Short loin / NY Strip",
+      "body_fi": "New York stripin lähde: tiivis rakenne, selkeä naudanmaku ja rasvareuna.",
+      "body_en": "Source of the New York strip: firm texture, clean beefy flavour and a fat cap.",
+      "best_fi": "New York strip, T-bone, porterhouse",
+      "best_en": "New York strip, T-bone, porterhouse"
+    },
+    {
+      "id": "tenderloin",
+      "name_fi": "Sisäfilee",
+      "name_en": "Tenderloin",
+      "us_name": "Tenderloin / Filet mignon",
+      "body_fi": "Ruhon mureimpi lihas selkärangan alla. Hienovarainen maku.",
+      "body_en": "The most tender muscle, tucked under the spine. Delicate flavour.",
+      "best_fi": "Filet mignon, chateaubriand",
+      "best_en": "Filet mignon, chateaubriand"
+    },
+    {
+      "id": "sirloin",
+      "name_fi": "Paahtopaisti",
+      "name_en": "Sirloin",
+      "us_name": "Sirloin",
+      "body_fi": "Maukas ja edullisempi pihviosa ulkofileen takana.",
+      "body_en": "Flavourful, more affordable steaks just behind the short loin.",
+      "best_fi": "Paahtopaisti, picanha, grillipihvit",
+      "best_en": "Top sirloin, picanha, grilling steaks"
+    },
+    {
+      "id": "round",
+      "name_fi": "Reisi",
+      "name_en": "Round",
+      "us_name": "Round",
+      "body_fi": "Vähärasvainen takaneljännes: sisä-, ulko- ja kulmapaisti.",
+      "body_en": "Lean hindquarter: topside, silverside and knuckle.",
+      "best_fi": "Paahtopaisti, roast beef, kuivaliha",
+      "best_en": "Roast beef, minute steaks, jerky"
+    },
+    {
+      "id": "brisket",
+      "name_fi": "Rinta",
+      "name_en": "Brisket",
+      "us_name": "Brisket",
+      "body_fi": "Amerikkalaisen savustuksen kuningas. Vaatii aikaa ja matalaa lämpöä.",
+      "body_en": "King of American barbecue. Needs time and low heat.",
+      "best_fi": "Savustus, suolaliha, pastrami",
+      "best_en": "Smoking, corned beef, pastrami"
+    },
+    {
+      "id": "plate",
+      "name_fi": "Kylki",
+      "name_en": "Plate",
+      "us_name": "Short plate",
+      "body_fi": "Short ribsit ja skirt steak. Rasvainen ja täyteläinen.",
+      "body_en": "Short ribs and skirt steak. Rich and full-flavoured.",
+      "best_fi": "Short ribs, skirt steak",
+      "best_en": "Short ribs, skirt steak"
+    },
+    {
+      "id": "flank",
+      "name_fi": "Kuve",
+      "name_en": "Flank",
+      "us_name": "Flank",
+      "body_fi": "Pitkäsyinen ja maukas. Leikataan ohueksi syitä vastaan.",
+      "body_en": "Long-grained and flavourful. Slice thin against the grain.",
+      "best_fi": "Flank steak, fajitas",
+      "best_en": "Flank steak, fajitas, London broil"
+    },
+    {
+      "id": "shank",
+      "name_fi": "Potka",
+      "name_en": "Shank",
+      "us_name": "Shank",
+      "body_fi": "Luinen ja kollageenipitoinen. Liemien ja osso bucon raaka-aine.",
+      "body_en": "Bony and rich in collagen. Made for stock and osso buco.",
+      "best_fi": "Liemi, osso buco",
+      "best_en": "Stock, osso buco"
+    }
+  ]
+}

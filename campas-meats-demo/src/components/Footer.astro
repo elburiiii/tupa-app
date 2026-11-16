@@ -1,0 +1,39 @@
+---
+import { UI, NAV, href, tr, type Lang } from '../lib/i18n';
+import { site } from '../lib/content';
+import HoursTable from './HoursTable.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+---
+<footer class="on-dark mt-24 bg-charcoal text-cream">
+  <div class="container-x grid gap-12 py-16 md:grid-cols-[1.3fr_1fr_1fr]">
+    <div>
+      <p class="font-serif text-3xl font-bold">Campas Meats</p>
+      <p class="eyebrow mt-2 text-brass-light">New York Cuts</p>
+      <p class="mt-6 max-w-sm font-serif text-lg italic text-cream/90">
+        {lang === 'fi' ? '”Jaamme tarinamme – pala kerrallaan.”' : '“We share our story — one bite at a time.”'}
+      </p>
+      <address class="mt-6 not-italic leading-relaxed">
+        {site.address_street}<br />{site.address_city}, {tr(site, 'address_country', lang)}<br />
+        <a class="text-brass-light underline" href={site.map_url} target="_blank" rel="noopener">{t.openMap} <span class="sr-only">{t.opensNewTab}</span></a>
+      </address>
+      <p class="mt-4">{t.phone}: <span class="font-mono text-sm">{site.phone}</span><br />{t.email}: <span class="font-mono text-sm">{site.email}</span></p>
+    </div>
+    <div>
+      <h2 class="eyebrow mb-4 text-brass-light">{t.hours}</h2>
+      <HoursTable lang={lang} compact />
+    </div>
+    <div>
+      <h2 class="eyebrow mb-4 text-brass-light">{lang === 'fi' ? 'Sivut' : 'Pages'}</h2>
+      <ul class="space-y-2">
+        {NAV.map((k) => <li><a class="text-cream underline decoration-cream/30 hover:decoration-cream" href={href(k, lang)}>{t.nav[k]}</a></li>)}
+      </ul>
+      <h2 class="eyebrow mb-3 mt-8 text-brass-light">{lang === 'fi' ? 'Kumppanitilat' : 'Partner farms'}</h2>
+      <p class="text-cream/90">{site.partner_farms.join(' · ')}</p>
+    </div>
+  </div>
+  <div class="border-t border-cream/15">
+    <p class="container-x py-5 text-sm text-cream/75">© Campas Meats · {lang === 'fi' ? 'Y-tunnus' : 'Business ID'} {site.business_id}</p>
+  </div>
+</footer>

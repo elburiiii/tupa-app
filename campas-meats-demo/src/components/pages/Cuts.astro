@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import CutDiagram from '../CutDiagram.astro';
+import type { Lang } from '../../lib/i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const fi = lang === 'fi';
+---
+<Base lang={lang} routeKey="cuts" title={fi ? 'Leikkaukset' : 'Cuts'}
+  description={fi ? 'Interaktiivinen naudan leikkauskaavio: mistä ribeye, New York strip ja sisäfilee tulevat ja miten niitä kannattaa valmistaa.' : 'Interactive beef cut chart: where the ribeye, New York strip and tenderloin come from and how to cook them.'}>
+  <section class="container-x pt-12 sm:pt-20">
+    <p class="eyebrow text-oxblood">{fi ? 'Lihakauppiaan kartta' : "The butcher's map"}</p>
+    <h1 class="mt-4 max-w-[16ch] text-5xl sm:text-7xl">{fi ? 'Mistä pihvisi tulee?' : 'Where does your steak come from?'}</h1>
+    <p class="mt-6 max-w-[56ch] text-lg text-ink-muted">
+      {fi ? 'Valitse ruhon osa nähdäksesi, mitä siitä leikataan ja miten se kannattaa valmistaa. Mukana ovat myös amerikkalaiset nimet, kuten New York strip.' : 'Choose a section to see what is cut from it and how to cook it. Finnish names are included because that is what you will see on Finnish labels.'}
+    </p>
+    <hr class="rule-double my-10 text-oxblood" />
+    <CutDiagram lang={lang} />
+  </section>
+</Base>

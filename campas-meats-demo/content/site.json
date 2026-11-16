@@ -1,0 +1,17 @@
+{
+  "_help": "Shop details shown in the header, footer and Contact page. Text in [square brackets] is a placeholder: replace it with the real value.",
+  "name": "Campas Meats",
+  "tagline_fi": "New York Cuts",
+  "tagline_en": "New York Cuts",
+  "founders": "Roberto & Eveliina Campas",
+  "address_street": "Horninkatu 7",
+  "address_city": "Salo",
+  "address_country_fi": "Suomi",
+  "address_country_en": "Finland",
+  "map_url": "https://www.google.com/maps/search/?api=1&query=Horninkatu+7%2C+Salo%2C+Finland",
+  "phone": "[phone]",
+  "email": "[email]",
+  "instagram": "[instagram handle]",
+  "business_id": "[Y-tunnus / business ID]",
+  "partner_farms": ["Vallan Maukas", "Kiimalan Tila", "Lurkin Tila", "[Wagyu-cross farm name]"]
+}

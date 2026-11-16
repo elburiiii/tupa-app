@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import EventCard from '../EventCard.astro';
+import { UI, href, type Lang } from '../../lib/i18n';
+import { upcomingEvents } from '../../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const fi = lang === 'fi';
+---
+<Base lang={lang} routeKey="events" title={t.nav.events}
+  description={fi ? 'Campas Meatsin tulevat markkinat ja pop-upit Salossa, Tampereella ja muualla.' : 'Upcoming Campas Meats markets and pop-ups in Salo, Tampere and beyond.'}>
+  <section class="container-x pt-12 sm:pt-20">
+    <p class="eyebrow text-oxblood">{fi ? 'Markkinat & pop-upit' : 'Markets & pop-ups'}</p>
+    <h1 class="mt-4 text-5xl sm:text-7xl">{t.nav.events}</h1>
+    <p class="mt-6 max-w-[56ch] text-lg text-ink-muted">{fi ? 'Tule tapaamaan meitä tiskin toiselle puolelle. Ennakkotilaukset voi noutaa tapahtumista.' : 'Meet us on the other side of the counter. Pre-orders can be collected at events.'} <a class="font-semibold text-oxblood underline" href={href('checkout', lang)}>{fi ? 'Ennakkotilaa' : 'Pre-order'}</a></p>
+    <hr class="rule-double my-10 text-oxblood" />
+    <div data-fresh-list class="max-w-3xl">
+      <h2 class="sr-only">{fi ? 'Tulevat tapahtumat' : 'Upcoming events'}</h2>
+      <div data-fresh-items hidden={upcomingEvents.length === 0}>
+        {upcomingEvents.map((e) => <EventCard e={e} lang={lang} />)}
+      </div>
+      <p data-empty-state hidden={upcomingEvents.length > 0} class="border-2 border-dashed border-oxblood/40 p-8 font-serif text-2xl">{t.noEvents}</p>
+    </div>
+  </section>
+</Base>

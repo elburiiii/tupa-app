@@ -1,0 +1,20 @@
+{
+  "_help": "Opening hours use 24-hour HH:MM. Leave open/close empty for a closed day. Exceptions (holidays) need a date and disappear automatically once the date has passed. EXAMPLE HOURS: replace with the real ones and set is_example to false.",
+  "is_example": true,
+  "regular": [
+    { "day": "mon", "open": "", "close": "" },
+    { "day": "tue", "open": "", "close": "" },
+    { "day": "wed", "open": "11:00", "close": "17:00" },
+    { "day": "thu", "open": "11:00", "close": "17:00" },
+    { "day": "fri", "open": "11:00", "close": "18:00" },
+    { "day": "sat", "open": "10:00", "close": "15:00" },
+    { "day": "sun", "open": "", "close": "" }
+  ],
+  "exceptions": [
+    { "date": "2026-06-19", "open": "", "close": "", "label_fi": "Juhannusaatto", "label_en": "Midsummer Eve", "is_example": true },
+    { "date": "2026-12-23", "open": "09:00", "close": "18:00", "label_fi": "Aattoa edeltävä päivä", "label_en": "Day before Christmas Eve", "is_example": true },
+    { "date": "2026-12-24", "open": "09:00", "close": "12:00", "label_fi": "Jouluaatto", "label_en": "Christmas Eve", "is_example": true },
+    { "date": "2026-12-25", "open": "", "close": "", "label_fi": "Joulupäivä", "label_en": "Christmas Day", "is_example": true },
+    { "date": "2026-12-26", "open": "", "close": "", "label_fi": "Tapaninpäivä", "label_en": "Boxing Day", "is_example": true }
+  ]
+}

@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../ProductCard.astro';
+import ShopStatusPanel from '../ShopStatusPanel.astro';
+import { href, type Lang } from '../../lib/i18n';
+import { products } from '../../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const fi = lang === 'fi';
+const groups = [
+  { id: 'steaks', title: fi ? 'Rotukarjan pihvit' : 'Heritage-breed steaks' },
+  { id: 'sausages', title: fi ? 'Käsintehdyt makkarat' : 'Handcrafted sausages' },
+  { id: 'selections', title: fi ? 'Lihakauppiaan valinnat' : "Butcher's picks" },
+  { id: 'boxes', title: fi ? 'Valikoimalaatikot' : 'Selection boxes' },
+] as const;
+---
+<Base lang={lang} routeKey="shop" title={fi ? 'Kauppa' : 'Shop'}
+  description={fi ? 'Tilaa Campas Meatsin pihvit, makkarat ja valikoimalaatikot noudettavaksi tai kotiin koko Suomeen.' : 'Order Campas Meats steaks, sausages and selection boxes for pickup or delivery anywhere in Finland.'}>
+  <section class="container-x pt-12 sm:pt-20">
+    <p class="eyebrow text-oxblood">{fi ? 'Verkkokauppa' : 'Online shop'}</p>
+    <h1 class="mt-4 text-5xl sm:text-7xl">{fi ? 'Kauppa' : 'Shop'}</h1>
+    <p class="mt-6 max-w-[58ch] text-lg text-ink-muted">
+      {fi ? 'Hinnat ovat kilohintoja tai pakettihintoja. Lihatuotteet punnitaan, joten lopullinen hinta vahvistetaan pakkausvaiheessa.' : 'Prices are per kilo or per pack. Meat is weighed, so the final price is confirmed when your order is packed.'}
+      <a class="font-semibold text-oxblood underline" href={href('delivery', lang)}>{fi ? 'Toimitus ja nouto' : 'Delivery and pickup'}</a>
+    </p>
+    <nav aria-label={fi ? 'Tuoteryhmät' : 'Categories'} class="mt-8">
+      <ul class="flex flex-wrap gap-2">
+        {groups.map((g) => <li><a href={`#${g.id}`} class="inline-flex min-h-11 items-center border border-oxblood/40 px-4 font-semibold text-oxblood no-underline hover:bg-oxblood hover:text-cream">{g.title}</a></li>)}
+      </ul>
+    </nav>
+    <hr class="rule-double my-10 text-oxblood" />
+    <ShopStatusPanel lang={lang} />
+    <p id="cart-live" class="sr-only" aria-live="polite"></p>
+    {groups.map((g) => {
+      const list = products.filter((p) => p.category === g.id);
+      return list.length > 0 && (
+        <section id={g.id} aria-labelledby={`${g.id}-h`} class="mb-20 scroll-mt-24">
+          <h2 id={`${g.id}-h`} class="mb-8 text-4xl">{g.title}</h2>
+          <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((p) => <ProductCard p={p} lang={lang} />)}
+          </div>
+        </section>
+      );
+    })}
+  </section>
+</Base>

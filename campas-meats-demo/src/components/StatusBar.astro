@@ -1,0 +1,30 @@
+---
+/**
+ * The single shop status, rendered three ways; CSS (driven by <html data-shop>) shows exactly one.
+ * It is impossible for "open" and "closed" to appear at the same time.
+ */
+import { UI, fmtDate, tr, type Lang } from '../lib/i18n';
+import { status } from '../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const note = tr(status, 'note', lang);
+const until = status.until ? fmtDate(status.until, lang, { day: 'numeric', month: 'long' }) : '';
+---
+<div class="on-dark bg-charcoal text-cream">
+  <div class="container-x flex min-h-10 items-center gap-3 py-2 text-sm">
+    <p data-status-view="open" class="flex-view items-center gap-2">
+      <span aria-hidden="true" class="inline-block h-2.5 w-2.5 rounded-full bg-[#7fc48c]"></span>
+      <span>{t.status.open}</span>
+    </p>
+    <p data-status-view="sold-out" class="flex-view items-center gap-2">
+      <span aria-hidden="true" class="inline-block h-2.5 w-2.5 rounded-full bg-brass-light"></span>
+      <span data-until-text data-lang={lang}>{until ? t.status.soldOutUntil(until) : t.status['sold-out']}</span>
+    </p>
+    <p data-status-view="closed" class="flex-view items-center gap-2">
+      <span aria-hidden="true" class="inline-block h-2.5 w-2.5 rounded-full bg-[#e5867f]"></span>
+      <span>{t.status.closed}</span>
+    </p>
+    {note && <p class="hidden text-brass-light sm:block">· {note}</p>}
+  </div>
+</div>

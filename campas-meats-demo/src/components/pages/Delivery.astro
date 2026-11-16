@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import ImagePlaceholder from '../ImagePlaceholder.astro';
+import { UI, href, tr, fmtPrice, type Lang } from '../../lib/i18n';
+import { delivery, site } from '../../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const fi = lang === 'fi';
+const boxes = [
+  { id: 'small-box', name: fi ? 'Pieni laatikko' : 'Small box', vol: fi ? '5,6 l' : '5.6 L', kg: fi ? 'n. 2,5–3,5 kg' : 'approx. 2.5–3.5 kg', who: fi ? 'Viikonlopun grilli tai kahden hengen kokeilu.' : 'A weekend cook-out, or a first try for two.' },
+  { id: 'large-box', name: fi ? 'Iso laatikko' : 'Large box', vol: fi ? '25 l' : '25 L', kg: fi ? 'n. 10–12 kg' : 'approx. 10–12 kg', who: fi ? 'Pakastimen täyttö perheelle tai porukalle.' : 'Stocking the freezer for a family or a group.' },
+];
+const priceOf = (id: string) => delivery.options.find((o) => o.id === id)?.price ?? null;
+---
+<Base lang={lang} routeKey="delivery" title={t.nav.delivery}
+  description={fi ? 'Campas Meats toimittaa kylmälaatikoissa koko Suomeen: pieni 5,6 l ja iso 25 l laatikko. Nouto myymälästä Salosta tai tapahtumista.' : 'Campas Meats ships cold boxes anywhere in Finland: a small 5.6 L box and a large 25 L box. Pickup from the shop in Salo or at events.'}>
+  <section class="container-x pt-12 sm:pt-20">
+    <p class="eyebrow text-oxblood">{fi ? 'Koko Suomeen' : 'Anywhere in Finland'}</p>
+    <h1 class="mt-4 text-5xl sm:text-7xl">{t.nav.delivery}</h1>
+    <p class="mt-6 max-w-[56ch] text-lg text-ink-muted">{fi ? 'Pakkaamme lihat kylmälaatikkoon ja lähetämme ne kotiovellesi – tai noudat ne itse myymälästä tai tapahtumasta.' : 'We pack your order in a cold box and send it to your door — or collect it yourself at the shop or an event.'}</p>
+    <hr class="rule-double my-10 text-oxblood" />
+
+    <h2 class="text-4xl">{fi ? 'Kaksi laatikkokokoa' : 'Two box sizes'}</h2>
+    <div class="mt-8 grid gap-8 md:grid-cols-2">
+      {boxes.map((b, i) => (
+        <article class:list={['border-2 border-oxblood p-6 sm:p-8', i === 1 && 'on-dark bg-oxblood text-cream']} aria-labelledby={`box-${b.id}`}>
+          <div class="flex items-start justify-between gap-4">
+            <h3 id={`box-${b.id}`} class="text-3xl">{b.name}</h3>
+            <p class="font-serif text-5xl leading-none">{b.vol}</p>
+          </div>
+          <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-current/30 pt-4">
+            <div><dt class="eyebrow !text-[0.6875rem] opacity-85">{fi ? 'Lihaa' : 'Meat'}</dt><dd class="mt-1 font-serif text-xl">{b.kg}</dd></div>
+            <div><dt class="eyebrow !text-[0.6875rem] opacity-85">{fi ? 'Toimitus' : 'Shipping'}</dt><dd class="mt-1 font-serif text-xl tabular-nums">{fmtPrice(priceOf(b.id), lang)}</dd></div>
+          </dl>
+          <p class="mt-4">{b.who}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-20 grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-start">
+      <div>
+        <h2 class="text-4xl">{fi ? 'Näin toimitus toimii' : 'How delivery works'}</h2>
+        <ol class="mt-8 space-y-6">
+          {[
+            [fi ? 'Tilaa verkossa' : 'Order online', fi ? 'Valitse tuotteet ja laatikkokoko kassalla.' : 'Choose your products and box size at checkout.'],
+            [fi ? 'Pakkaamme kylmänä' : 'We pack it cold', fi ? `Lähetyspäivät: ${tr(delivery, 'dispatch_days', lang)}. Tilaa viimeistään: ${tr(delivery, 'order_cutoff', lang)}.` : `Dispatch days: ${tr(delivery, 'dispatch_days', lang)}. Order by: ${tr(delivery, 'order_cutoff', lang)}.`],
+            [fi ? 'Perillä' : 'Delivered', fi ? `Kuljetus: ${delivery.carrier}. Laita liha jääkaappiin heti saavuttuaan.` : `Carrier: ${delivery.carrier}. Refrigerate the meat as soon as it arrives.`],
+          ].map(([h, b], i) => (
+            <li class="flex gap-5">
+              <span aria-hidden="true" class="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-oxblood font-serif text-xl text-oxblood">{i + 1}</span>
+              <div><h3 class="text-2xl">{h}</h3><p class="mt-1 text-ink-muted">{b}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <ImagePlaceholder lang={lang} aspect="aspect-[4/3]" label={fi ? 'Kuva: kylmälaatikkoa suljetaan, kylmäkallet ja tilauslappu näkyvissä' : 'Photo: a cold box being sealed, ice packs and order slip visible'} />
+    </div>
+
+    <h2 class="mt-20 text-4xl">{fi ? 'Nouto' : 'Pickup'}</h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      {delivery.options.filter((o) => o.free).map((o) => (
+        <div class="border-t-2 border-oxblood/40 pt-5">
+          <h3 class="text-2xl">{tr(o, 'title', lang)}</h3>
+          <p class="mt-2 text-ink-muted">{tr(o, 'body', lang)}</p>
+          <a class="mt-3 inline-block font-semibold text-oxblood underline" href={href(o.id === 'pickup' ? 'contact' : 'events', lang)}>
+            {o.id === 'pickup' ? `${site.address_street}, ${site.address_city} · ${t.hours}` : t.allEvents}
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,41 @@
+{
+  "_help": "Short notices at the top of the site. Each one shows from start to end (both YYYY-MM-DD, inclusive) and then disappears by itself. type is one of: hours, popup, stock, info. Notices can NOT open or close the shop: use status.json for that.",
+  "notices": [
+    {
+      "id": "midsummer-2026",
+      "type": "hours",
+      "start": "2026-06-10",
+      "end": "2026-06-21",
+      "title_fi": "Juhannuksen aukioloajat",
+      "title_en": "Midsummer opening hours",
+      "body_fi": "Suljettu juhannusaattona. Hyvää juhannusta!",
+      "body_en": "Closed on Midsummer Eve. Happy Midsummer!",
+      "link": "",
+      "is_example": true
+    },
+    {
+      "id": "christmas-preorders-2026",
+      "type": "stock",
+      "start": "2026-11-01",
+      "end": "2026-12-18",
+      "title_fi": "Joulun ennakkotilaukset auki",
+      "title_en": "Christmas pre-orders are open",
+      "body_fi": "Varaa juhlapaisti tai lahjalaatikko ajoissa: määrät ovat rajalliset.",
+      "body_en": "Reserve your holiday roast or gift box early: quantities are limited.",
+      "link": "shop",
+      "is_example": true
+    },
+    {
+      "id": "christmas-hours-2026",
+      "type": "hours",
+      "start": "2026-12-01",
+      "end": "2026-12-26",
+      "title_fi": "Joulun aukioloajat",
+      "title_en": "Christmas opening hours",
+      "body_fi": "Pyhien poikkeusaukiolot löytyvät yhteystiedoista.",
+      "body_en": "Holiday opening hours are listed on the Contact page.",
+      "link": "contact",
+      "is_example": true
+    }
+  ]
+}

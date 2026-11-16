@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import ImagePlaceholder from '../ImagePlaceholder.astro';
+import { href, type Lang } from '../../lib/i18n';
+import * as storyFi from '../../../content/pages/story.fi.md';
+import * as storyEn from '../../../content/pages/story.en.md';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const fi = lang === 'fi';
+const story = fi ? storyFi : storyEn;
+const fm = story.frontmatter as { title: string; description: string; lead: string };
+const Content = story.Content;
+---
+<Base lang={lang} routeKey="story" title={fm.title} description={fm.description}>
+  <article>
+    <header class="container-x pb-10 pt-12 sm:pt-20">
+      <p class="eyebrow text-oxblood">Campas Meats · Salo</p>
+      <h1 class="mt-4 text-5xl sm:text-7xl">{fm.title}</h1>
+      <p class="mt-6 max-w-[30ch] font-serif text-2xl italic text-oxblood sm:text-3xl">{fm.lead}</p>
+    </header>
+    <div class="container-x grid gap-12 lg:grid-cols-[1fr_22rem] lg:gap-20">
+      <div class="prose-campas text-lg">
+        <Content />
+      </div>
+      <aside class="space-y-6" aria-label={fi ? 'Kuvat' : 'Images'}>
+        <ImagePlaceholder lang={lang} aspect="aspect-[3/4]" label={fi ? 'Kuva: vanha veitsirulla ja teroituspuikko New Yorkin ajoilta, asetelma pölkyllä' : 'Photo: an old knife roll and honing steel from the New York years, still life on the block'} />
+        <ImagePlaceholder lang={lang} aspect="aspect-[4/3]" label={fi ? 'Kuva: laitumella laiduntavia nautoja kumppanitilalla, kaukaa kuvattuna' : 'Photo: cattle grazing at a partner farm, shot from a distance'} />
+        <a href={href('cuts', lang)} class="btn btn-ghost w-full no-underline">{fi ? 'Opi New Yorkin leikkaukset' : 'Learn the New York cuts'}</a>
+      </aside>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,21 @@
+---
+/** Large status explanation for Shop & Checkout. Driven by the same single status field. */
+import { UI, fmtDate, href, tr, type Lang } from '../lib/i18n';
+import { status } from '../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const fi = lang === 'fi';
+const until = status.until ? fmtDate(status.until, lang, { day: 'numeric', month: 'long' }) : '';
+const note = tr(status, 'note', lang);
+---
+<div data-status-view="sold-out" class="mb-10 border-2 border-oxblood bg-paper p-6">
+  <p class="font-serif text-2xl text-oxblood"><span data-until-text data-lang={lang}>{until ? t.status.soldOutUntil(until) : t.status['sold-out']}</span></p>
+  <p class="mt-2">{fi ? 'Tilaukset aukeavat automaattisesti uudelleen, kun uusi erä on valmis. Tule sillä välin tapaamaan meitä tapahtumissa.' : 'Ordering reopens automatically when the next batch is ready. Meanwhile, come and see us at an event.'} <a class="font-semibold text-oxblood underline" href={href('events', lang)}>{t.nav.events}</a></p>
+  {note && <p class="mt-2 text-ink-muted">{note}</p>}
+</div>
+<div data-status-view="closed" class="mb-10 border-2 border-oxblood bg-paper p-6">
+  <p class="font-serif text-2xl text-oxblood">{t.status.closed}</p>
+  <p class="mt-2">{fi ? 'Verkkotilaukset eivät ole juuri nyt käytössä. Voit silti selata valikoimaa.' : 'Online ordering is paused right now. You can still browse the range.'} <a class="font-semibold text-oxblood underline" href={href('contact', lang)}>{t.nav.contact}</a></p>
+  {note && <p class="mt-2 text-ink-muted">{note}</p>}
+</div>

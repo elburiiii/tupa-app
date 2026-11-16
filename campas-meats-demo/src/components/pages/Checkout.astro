@@ -1,0 +1,126 @@
+---
+import Base from '../../layouts/Base.astro';
+import ShopStatusPanel from '../ShopStatusPanel.astro';
+import { UI, href, tr, fmtPrice, fmtDate, type Lang } from '../../lib/i18n';
+import { delivery, upcomingEvents, eventEnd } from '../../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const fi = lang === 'fi';
+const field = 'mt-1 block min-h-11 w-full border-2 border-ink/30 bg-cream px-3 py-2 focus-visible:border-oxblood';
+---
+<Base lang={lang} routeKey="checkout" title={t.nav.checkout}
+  description={fi ? 'Campas Meatsin kassa (demo). Maksuja ei käsitellä.' : 'Campas Meats checkout (demo). No payments are processed.'}>
+  <section class="container-x pt-12 sm:pt-20">
+    <p class="eyebrow text-oxblood">{fi ? 'Demo – tilausta ei lähetetä' : 'Demo – no order is sent'}</p>
+    <h1 class="mt-4 text-5xl sm:text-6xl">{t.nav.checkout}</h1>
+    <hr class="rule-double my-10 text-oxblood" />
+    <ShopStatusPanel lang={lang} />
+
+    <div class="grid gap-12 lg:grid-cols-[1fr_24rem]">
+      <form id="checkout-form" novalidate class="space-y-10" data-needs-items>
+        <fieldset>
+          <legend class="mb-4 font-serif text-2xl text-oxblood">{fi ? '1. Yhteystiedot' : '1. Your details'}</legend>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block sm:col-span-2">{fi ? 'Nimi' : 'Name'} <span aria-hidden="true">*</span>
+              <input name="name" required autocomplete="name" class={field} /></label>
+            <label class="block">{t.email} <span aria-hidden="true">*</span>
+              <input name="email" type="email" required autocomplete="email" class={field} /></label>
+            <label class="block">{t.phone}
+              <input name="phone" type="tel" autocomplete="tel" class={field} /></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mb-4 font-serif text-2xl text-oxblood">{fi ? '2. Toimitustapa' : '2. Delivery method'}</legend>
+          <div class="space-y-3">
+            {delivery.options.map((o, i) => (
+              <label class="flex cursor-pointer gap-4 border-2 border-ink/20 p-4 has-[:checked]:border-oxblood has-[:checked]:bg-paper">
+                <input type="radio" name="delivery" value={o.id} checked={i === 0} class="mt-1.5 h-5 w-5 accent-oxblood" />
+                <span class="flex-1">
+                  <span class="flex justify-between gap-4 font-semibold"><span>{tr(o, 'title', lang)}</span><span class="tabular-nums">{o.free ? (fi ? 'Maksuton' : 'Free') : fmtPrice(o.price, lang)}</span></span>
+                  <span class="block text-ink-muted">{tr(o, 'body', lang)}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+          <label class="mt-4 block" data-event-picker>{fi ? 'Tapahtuma noutoa varten' : 'Event for pickup'}
+            <select name="event" class={field}>
+              {upcomingEvents.map((e) => <option value={e.id} data-expires={eventEnd(e)}>{fmtDate(e.date, lang, { day: 'numeric', month: 'numeric' })} · {tr(e, 'title', lang)}, {e.city}</option>)}
+            </select>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mb-4 font-serif text-2xl text-oxblood">{fi ? '3. Maksu' : '3. Payment'}</legend>
+          {/*
+            ============================================================================
+            PAYMENT PROVIDER PLUGS IN HERE.
+            This demo collects no payment details and sends nothing.
+            In production, replace this block with ONE of:
+              • Paytrail (common in Finland: bank buttons, MobilePay, cards):
+                  server creates a payment via Paytrail's API, the browser is redirected
+                  to the returned href, and Paytrail calls back to a success/cancel URL.
+              • Stripe Checkout: server creates a Checkout Session; redirect to session.url.
+            Either way the price must be calculated on the SERVER from content/products.json,
+            never trusted from the browser cart. Weighed items usually need a reservation
+            (authorise now, capture the final weighed amount when the order is packed).
+            Since the site is static, that server part would be a small serverless function.
+            ============================================================================
+          */}
+          <div class="border-2 border-dashed border-ink/30 p-5 text-ink-muted">
+            <p class="font-semibold text-ink">{fi ? 'Maksutapa liitetään tähän (Paytrail tai Stripe).' : 'Payment provider goes here (Paytrail or Stripe).'}</p>
+            <p class="mt-1">{fi ? 'Demossa ei kysytä maksutietoja eikä mitään veloiteta.' : 'This demo asks for no payment details and charges nothing.'}</p>
+          </div>
+        </fieldset>
+
+        <label class="block">{fi ? 'Lisätiedot (esim. pihvien paksuus)' : 'Notes (e.g. steak thickness)'}
+          <textarea name="notes" rows="3" class={field}></textarea></label>
+
+        <p data-form-error class="font-semibold text-oxblood" role="alert" hidden>{fi ? 'Täytä nimi ja toimiva sähköpostiosoite.' : 'Please fill in your name and a valid email address.'}</p>
+        <button type="submit" data-place-order class="btn w-full sm:w-auto">{fi ? 'Lähetä demotilaus' : 'Place demo order'}</button>
+      </form>
+
+      <aside aria-labelledby="summary-h" class="h-fit border-2 border-oxblood bg-cream p-6 lg:sticky lg:top-6">
+        <h2 id="summary-h" class="font-serif text-2xl text-oxblood">{fi ? 'Tilauksesi' : 'Your order'}</h2>
+        <ul data-cart-lines class="mt-2 divide-y divide-oxblood/15"></ul>
+        <p data-cart-empty class="py-6 text-ink-muted">{t.cartEmpty} <a class="font-semibold text-oxblood underline" href={href('shop', lang)}>{t.nav.shop}</a></p>
+        <p class="mt-4 flex justify-between border-t-4 border-double border-oxblood/40 pt-4 font-semibold"><span>{t.cartTotal}</span><span data-cart-total class="tabular-nums">€XX</span></p>
+      </aside>
+    </div>
+
+    <div id="order-done" hidden tabindex="-1" class="mx-auto max-w-xl border-2 border-oxblood bg-paper p-8 text-center">
+      <p class="eyebrow text-oxblood">Demo</p>
+      <h2 class="mt-2 text-4xl">{fi ? 'Kiitos!' : 'Thank you!'}</h2>
+      <p class="mt-4">{fi ? 'Tämä oli demotilaus: mitään ei lähetetty eikä veloitettu. Oikealla sivustolla asiakas ohjattaisiin tässä kohtaa maksamaan.' : 'This was a demo order: nothing was sent or charged. On the real site the customer would be sent to payment at this point.'}</p>
+      <a href={href('shop', lang)} class="btn mt-6 no-underline">{t.continueShopping}</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById('checkout-form') as HTMLFormElement | null;
+  const picker = document.querySelector<HTMLElement>('[data-event-picker]');
+  const syncPicker = () => {
+    const v = (form?.querySelector('input[name="delivery"]:checked') as HTMLInputElement | null)?.value;
+    if (picker) picker.hidden = v !== 'event';
+  };
+  form?.addEventListener('change', syncPicker);
+  syncPicker();
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const err = form.querySelector<HTMLElement>('[data-form-error]')!;
+    const name = (form.elements.namedItem('name') as HTMLInputElement).value.trim();
+    const email = form.elements.namedItem('email') as HTMLInputElement;
+    if (!name || !email.value || !email.checkValidity()) { err.hidden = false; return; }
+    err.hidden = true;
+    // DEMO: this is where the order would be POSTed to a server function that starts a
+    // Paytrail / Stripe payment (see the comment block in the payment fieldset above).
+    try { localStorage.removeItem('campas-demo-cart'); } catch {}
+    form.closest('section')!.querySelector<HTMLElement>('.grid')!.hidden = true;
+    const done = document.getElementById('order-done')!;
+    done.hidden = false;
+    done.focus();
+    document.querySelectorAll('[data-cart-count]').forEach((el) => (el.textContent = '0'));
+  });
+</script>

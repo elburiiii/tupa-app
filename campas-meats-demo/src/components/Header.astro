@@ -1,0 +1,68 @@
+---
+import { UI, NAV, href, ROUTES, type Lang, type RouteKey } from '../lib/i18n';
+import StatusBar from './StatusBar.astro';
+interface Props { lang: Lang; routeKey: RouteKey }
+const { lang, routeKey } = Astro.props;
+const t = UI[lang];
+const other: Lang = lang === 'fi' ? 'en' : 'fi';
+---
+<header class="relative z-30">
+  <a href="#main" class="sr-only z-50 bg-oxblood px-4 py-3 text-cream focus:not-sr-only focus:absolute focus:left-3 focus:top-3">{t.skip}</a>
+  <StatusBar lang={lang} />
+  <div class="border-b-4 border-double border-oxblood/60 bg-cream">
+    <div class="container-x flex items-center justify-between gap-4 py-3 lg:py-4">
+      <a href={href('home', lang)} class="group flex items-center gap-3 no-underline" aria-label={`Campas Meats – ${t.nav.home}`}>
+        <svg aria-hidden="true" viewBox="0 0 64 64" class="h-11 w-11 shrink-0 text-oxblood sm:h-12 sm:w-12">
+          <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <circle cx="32" cy="32" r="25" fill="none" stroke="currentColor" stroke-width="1"/>
+          <text x="32" y="40" text-anchor="middle" font-family="Fraunces Variable, Georgia, serif" font-size="22" font-weight="700" fill="currentColor">CM</text>
+        </svg>
+        <span class="leading-none">
+          <span class="block font-serif text-[1.45rem] font-bold tracking-tight text-oxblood sm:text-[1.65rem]">Campas Meats</span>
+          <span class="eyebrow mt-1 block !text-[0.6875rem] text-ink-muted">New York Cuts · Salo</span>
+        </span>
+      </a>
+
+      <nav aria-label={lang === 'fi' ? 'Päävalikko' : 'Main'} class="hidden lg:block">
+        <ul class="flex items-center gap-1">
+          {NAV.map((k) => (
+            <li>
+              <a href={href(k, lang)} aria-current={k === routeKey ? 'page' : undefined}
+                class:list={['block px-3 py-2 text-[0.9375rem] font-semibold no-underline hover:text-oxblood', k === routeKey ? 'text-oxblood underline decoration-2 underline-offset-8' : 'text-ink']}>
+                {t.nav[k]}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a href={ROUTES[routeKey][other]} hreflang={other} lang={other}
+          class="px-2 py-2 text-sm font-bold tracking-wider text-ink no-underline hover:text-oxblood">
+          <span aria-hidden="true">{other.toUpperCase()}</span><span class="sr-only">{UI[lang].otherLangLabel}</span>
+        </a>
+        <button type="button" data-cart-open class="relative flex h-11 items-center gap-2 px-2 text-ink hover:text-oxblood" aria-haspopup="dialog">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="sr-only">{t.cart}</span>
+          <span data-cart-count class="min-w-6 rounded-full bg-oxblood px-1.5 text-center text-xs font-bold leading-6 text-cream" aria-live="polite">0</span>
+        </button>
+        <button type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-nav" class="flex h-11 items-center gap-2 px-2 font-semibold text-ink lg:hidden">
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <span class="sr-only sm:not-sr-only">{t.menu}</span>
+        </button>
+      </div>
+    </div>
+    <nav id="mobile-nav" aria-label={lang === 'fi' ? 'Päävalikko' : 'Main'} hidden class="border-t border-oxblood/20 lg:hidden">
+      <ul class="container-x py-2">
+        {NAV.map((k) => (
+          <li>
+            <a href={href(k, lang)} aria-current={k === routeKey ? 'page' : undefined}
+              class:list={['flex min-h-12 items-center border-b border-oxblood/10 font-serif text-xl no-underline', k === routeKey ? 'text-oxblood' : 'text-ink']}>
+              {k === routeKey && <span aria-hidden="true" class="mr-2">›</span>}{t.nav[k]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

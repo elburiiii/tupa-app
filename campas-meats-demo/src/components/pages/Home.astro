@@ -1,0 +1,121 @@
+---
+import Base from '../../layouts/Base.astro';
+import ImagePlaceholder from '../ImagePlaceholder.astro';
+import EventCard from '../EventCard.astro';
+import { UI, href, type Lang } from '../../lib/i18n';
+import { upcomingEvents, site } from '../../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const fi = lang === 'fi';
+const categories = [
+  { n: 'I', title: fi ? 'Käsintehdyt makkarat' : 'Handcrafted sausages', body: fi ? 'Luonnonsuoleen täytetyt, tiskin takana tehdyt.' : 'Stuffed in natural casing, made behind the counter.', img: fi ? 'Kuva: makkaroita narulla myymälän tiskin yllä' : 'Photo: sausages hanging on string above the shop counter', link: 'shop' as const },
+  { n: 'II', title: fi ? 'Rotukarjan pihvit' : 'Heritage-breed steaks', body: fi ? 'Ribeye, New York strip ja muut klassikot – leikattuna niin kuin New Yorkissa.' : 'Ribeye, New York strip and the other classics, cut the New York way.', img: fi ? 'Kuva: pihvirivi vitriinissä, hintakyltit liidulla' : 'Photo: a row of steaks in the display case, chalk price tags', link: 'cuts' as const },
+  { n: 'III', title: fi ? 'Lihakauppiaan valikoimat' : "Butcher's selections", body: fi ? 'Kylmälaatikot koko Suomeen, kahdessa koossa.' : 'Cold boxes anywhere in Finland, in two sizes.', img: fi ? 'Kuva: paperiin käärityt paketit kylmälaatikossa' : 'Photo: paper-wrapped parcels packed in a cold box', link: 'delivery' as const },
+];
+---
+<Base lang={lang} routeKey="home" title="New York Cuts"
+  description={fi ? 'Campas Meats – amerikkalaistyylinen lihakauppa Salossa. Käsintehdyt makkarat, rotukarjan pihvit ja toimitukset koko Suomeen.' : 'Campas Meats – an American-style butcher shop in Salo, Finland. Handcrafted sausages, heritage-breed steaks and delivery across Finland.'}>
+
+  <!-- HERO -->
+  <section class="container-x grid gap-10 pb-16 pt-10 sm:pt-16 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-16 lg:pb-24">
+    <div>
+      <p class="eyebrow text-oxblood">{fi ? 'Lihakauppa · Horninkatu 7, Salo' : 'Butcher shop · Horninkatu 7, Salo'}</p>
+      <h1 class="mt-5 text-[3.25rem] font-semibold leading-[0.95] text-ink sm:text-7xl lg:text-[5.5rem]">
+        New York<br /><em class="font-normal text-oxblood">Cuts.</em>
+      </h1>
+      <p class="mt-6 max-w-[34ch] text-xl leading-relaxed text-ink-muted">
+        {fi ? 'Amerikkalaistyylinen lihakauppa, jonka takana on New Yorkissa koulutettu lihakauppias. Käsintehtyjä makkaroita, rotukarjan pihvejä ja tiloja, jotka tunnemme nimeltä.' : 'An American-style butcher shop run by a New York–trained butcher. Handcrafted sausages, heritage-breed steaks, and farms we know by name.'}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={href('shop', lang)} class="btn no-underline">{fi ? 'Tutustu valikoimaan' : 'Browse the shop'}</a>
+        <a href={href('cuts', lang)} class="btn btn-ghost no-underline">{fi ? 'Opi leikkaukset' : 'Learn the cuts'}</a>
+      </div>
+    </div>
+    <ImagePlaceholder lang={lang} aspect="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5]"
+      label={fi ? 'Kuva: Robertin kädet ja veitsi leikkuupölkyllä, entrecôte-pala, lämmin ikkunavalo. Ei kasvoja tarvita.' : "Photo: Roberto's hands and knife at the butcher block with a rib section, warm window light. No faces needed."} />
+  </section>
+
+  <!-- NEXT EVENT -->
+  <section aria-labelledby="next-event-h" class="on-dark bg-oxblood text-cream">
+    <div class="container-x grid gap-6 py-12 md:grid-cols-[14rem_1fr] md:items-start md:py-16">
+      <div>
+        <h2 id="next-event-h" class="eyebrow text-brass-light">{t.nextEvent}</h2>
+        <a href={href('events', lang)} class="mt-3 hidden font-semibold text-cream underline md:inline-block">{t.allEvents} →</a>
+      </div>
+      <div data-fresh-list class="[&_article]:border-cream/30 [&_article]:pt-0 [&_article]:md:border-t-0 [&_.border-oxblood]:border-brass-light [&_.text-oxblood]:text-brass-light [&_.text-ink-muted]:text-cream/80 [&_.text-ink]:text-cream">
+        <div data-first-only data-fresh-items hidden={upcomingEvents.length === 0}>
+          {upcomingEvents.map((e, i) => <EventCard e={e} lang={lang} large hidden={i > 0} />)}
+        </div>
+        <p data-empty-state hidden={upcomingEvents.length > 0} class="font-serif text-2xl">{t.noEvents}</p>
+        <a href={href('events', lang)} class="mt-4 inline-block font-semibold text-cream underline md:hidden">{t.allEvents} →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section aria-labelledby="cat-h" class="container-x py-20 lg:py-28">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <h2 id="cat-h" class="max-w-[18ch] text-4xl sm:text-5xl">{fi ? 'Tiskin takana tänään' : 'Behind the counter'}</h2>
+      <p class="max-w-sm text-ink-muted">{fi ? 'Kolme asiaa, joita meiltä kannattaa tulla hakemaan.' : 'Three things people come to us for.'}</p>
+    </div>
+    <hr class="rule-double my-10 text-oxblood" />
+    <ol class="grid gap-12 md:grid-cols-3 md:gap-8">
+      {categories.map((c) => (
+        <li class="flex flex-col">
+          <ImagePlaceholder lang={lang} label={c.img} aspect="aspect-[4/3]" />
+          <p class="mt-5 font-serif text-lg italic text-oxblood" aria-hidden="true">No. {c.n}</p>
+          <h3 class="mt-1 text-3xl">{c.title}</h3>
+          <p class="mt-2 text-ink-muted">{c.body}</p>
+          <a class="mt-4 self-start font-semibold text-oxblood underline" href={href(c.link, lang)}>{t.readMore}<span class="sr-only">: {c.title}</span></a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- STORY TEASER -->
+  <section aria-labelledby="story-h" class="border-y-4 border-double border-oxblood/40 bg-paper">
+    <div class="container-x grid gap-10 py-20 lg:grid-cols-[1fr_1.2fr] lg:items-center lg:py-24">
+      <ImagePlaceholder lang={lang} aspect="aspect-[4/3]"
+        label={fi ? 'Kuva: myymälän julkisivu Horninkadulla, kyltti ja ikkuna iltavalossa' : 'Photo: the shop front on Horninkatu, sign and window at dusk'} />
+      <div>
+        <h2 id="story-h" class="eyebrow text-oxblood">{t.nav.story}</h2>
+        <blockquote class="mt-4 font-serif text-4xl leading-tight sm:text-5xl">
+          {fi ? '”Jaamme tarinamme – pala kerrallaan.”' : '“We share our story — one bite at a time.”'}
+        </blockquote>
+        <p class="mt-6 max-w-[52ch] text-lg text-ink-muted">
+          {fi ? 'Roberto Campas oppi ammattinsa New Yorkissa. Yhdessä Eveliinan kanssa hän toi amerikkalaisen lihakaupan perinteen Saloon.' : 'Roberto Campas learned his trade in New York. Together with Eveliina, he brought the American butcher-shop tradition to Salo.'}
+        </p>
+        <a href={href('story', lang)} class="btn btn-ghost mt-8 no-underline">{fi ? 'Lue tarinamme' : 'Read our story'}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DELIVERY + FARMS -->
+  <section aria-labelledby="del-h" class="container-x grid gap-12 py-20 lg:grid-cols-2 lg:py-28">
+    <div>
+      <h2 id="del-h" class="text-4xl sm:text-5xl">{fi ? 'Koko Suomeen, kylmälaatikossa' : 'Across Finland, in a cold box'}</h2>
+      <div class="mt-8 grid grid-cols-2 gap-4">
+        <div class="border-2 border-oxblood p-5">
+          <p class="eyebrow text-ink-muted">{fi ? 'Pieni' : 'Small'}</p>
+          <p class="mt-2 font-serif text-4xl text-oxblood">{fi ? '5,6 l' : '5.6 L'}</p>
+          <p class="mt-1">{fi ? 'n. 2,5–3,5 kg' : 'approx. 2.5–3.5 kg'}</p>
+        </div>
+        <div class="border-2 border-oxblood bg-oxblood p-5 text-cream">
+          <p class="eyebrow text-cream/80">{fi ? 'Iso' : 'Large'}</p>
+          <p class="mt-2 font-serif text-4xl">25 {fi ? 'l' : 'L'}</p>
+          <p class="mt-1">{fi ? 'n. 10–12 kg' : 'approx. 10–12 kg'}</p>
+        </div>
+      </div>
+      <a href={href('delivery', lang)} class="mt-6 inline-block font-semibold text-oxblood underline">{t.nav.delivery} →</a>
+    </div>
+    <div>
+      <h2 class="text-4xl sm:text-5xl">{fi ? 'Tilat, jotka tunnemme nimeltä' : 'Farms we know by name'}</h2>
+      <ul class="mt-8 divide-y divide-oxblood/20 border-y border-oxblood/20">
+        {site.partner_farms.map((f, i) => (
+          <li class="flex items-baseline gap-4 py-4"><span aria-hidden="true" class="font-serif italic text-oxblood">0{i + 1}</span><span class="font-serif text-2xl">{f}</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>

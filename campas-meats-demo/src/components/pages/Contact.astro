@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import HoursTable from '../HoursTable.astro';
+import ImagePlaceholder from '../ImagePlaceholder.astro';
+import { UI, tr, type Lang } from '../../lib/i18n';
+import { site } from '../../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const fi = lang === 'fi';
+const isPh = (s: string) => s.startsWith('[');
+---
+<Base lang={lang} routeKey="contact" title={t.nav.contact}
+  description={fi ? 'Campas Meats, Horninkatu 7, Salo. Aukioloajat, puhelin, sähköposti ja kartta.' : 'Campas Meats, Horninkatu 7, Salo, Finland. Opening hours, phone, email and map.'}>
+  <section class="container-x pt-12 sm:pt-20">
+    <p class="eyebrow text-oxblood">{fi ? 'Tervetuloa myymälään' : 'Come by the shop'}</p>
+    <h1 class="mt-4 text-5xl sm:text-7xl">{t.nav.contact}</h1>
+    <hr class="rule-double my-10 text-oxblood" />
+    <div class="grid gap-14 lg:grid-cols-2">
+      <div>
+        <dl class="space-y-8">
+          <div>
+            <dt class="eyebrow text-ink-muted">{t.address}</dt>
+            <dd class="mt-2 font-serif text-3xl leading-tight">
+              <address class="not-italic">{site.address_street}<br />{site.address_city}, {tr(site, 'address_country', lang)}</address>
+              <a href={site.map_url} target="_blank" rel="noopener" class="btn btn-ghost mt-4 font-sans text-base no-underline">{t.openMap}<span class="sr-only"> {t.opensNewTab}</span> ↗</a>
+            </dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-ink-muted">{t.phone}</dt>
+            <dd class="mt-2 font-serif text-3xl">{isPh(site.phone) ? <span class="font-mono text-2xl">{site.phone}</span> : <a class="text-oxblood" href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a>}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-ink-muted">{t.email}</dt>
+            <dd class="mt-2 font-serif text-3xl">{isPh(site.email) ? <span class="font-mono text-2xl">{site.email}</span> : <a class="text-oxblood" href={`mailto:${site.email}`}>{site.email}</a>}</dd>
+          </div>
+          <div>
+            <dt class="eyebrow text-ink-muted">Instagram</dt>
+            <dd class="mt-2 font-mono text-xl">{site.instagram}</dd>
+          </div>
+        </dl>
+        <ImagePlaceholder lang={lang} aspect="aspect-[16/9]" class="mt-10" label={fi ? 'Kartta tai kuva: Horninkadun katunäkymä myymälän edestä' : 'Map or photo: street view of Horninkatu outside the shop'} />
+      </div>
+      <div class="border-2 border-oxblood bg-cream p-6 sm:p-8">
+        <h2 class="text-4xl text-oxblood">{t.hours}</h2>
+        <div class="mt-6 text-lg"><HoursTable lang={lang} /></div>
+      </div>
+    </div>
+  </section>
+</Base>

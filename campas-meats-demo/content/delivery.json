@@ -1,0 +1,46 @@
+{
+  "_help": "Delivery and pickup options. price is a number in euros or null (shown as €XX). Text in [square brackets] is a placeholder.",
+  "options": [
+    {
+      "id": "pickup",
+      "title_fi": "Nouto myymälästä",
+      "title_en": "Pickup from the shop",
+      "body_fi": "Nouda tilauksesi Horninkadulta myymälän aukioloaikoina.",
+      "body_en": "Collect your order at Horninkatu during opening hours.",
+      "price": 0,
+      "free": true
+    },
+    {
+      "id": "event",
+      "title_fi": "Nouto markkinoilta tai pop-upista",
+      "title_en": "Pickup at a market or pop-up",
+      "body_fi": "Valitse tapahtuma kassalla. Tulevat tapahtumat näet Tapahtumat-sivulta.",
+      "body_en": "Choose the event at checkout. Upcoming events are listed on the Events page.",
+      "price": 0,
+      "free": true
+    },
+    {
+      "id": "small-box",
+      "title_fi": "Kotiinkuljetus, pieni laatikko",
+      "title_en": "Home delivery, small box",
+      "body_fi": "5,6 l kylmälaatikko, noin 2,5–3,5 kg lihaa. Koko Suomeen.",
+      "body_en": "5.6 L cold box, about 2.5–3.5 kg of meat. Anywhere in Finland.",
+      "price": null,
+      "free": false
+    },
+    {
+      "id": "large-box",
+      "title_fi": "Kotiinkuljetus, iso laatikko",
+      "title_en": "Home delivery, large box",
+      "body_fi": "25 l kylmälaatikko, noin 10–12 kg lihaa. Koko Suomeen.",
+      "body_en": "25 L cold box, about 10–12 kg of meat. Anywhere in Finland.",
+      "price": null,
+      "free": false
+    }
+  ],
+  "dispatch_days_fi": "[lähetyspäivät]",
+  "dispatch_days_en": "[dispatch days]",
+  "carrier": "[carrier]",
+  "order_cutoff_fi": "[tilausten viimeinen kellonaika]",
+  "order_cutoff_en": "[order cut-off time]"
+}

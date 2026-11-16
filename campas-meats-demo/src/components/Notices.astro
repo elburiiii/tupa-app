@@ -1,0 +1,29 @@
+---
+/**
+ * Every notice carries data-start / data-end. Expired ones are dropped at build time;
+ * the browser script re-checks on load, so a stale build still hides them.
+ * Future notices ship hidden and switch on by themselves on their start date.
+ */
+import { UI, href, tr, type Lang } from '../lib/i18n';
+import { liveNotices, noticeVisibleAtBuild } from '../lib/content';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = UI[lang];
+const icon: Record<string, string> = { hours: '◷', popup: '✦', stock: '◆', info: '▪' };
+const anyVisible = liveNotices.some(noticeVisibleAtBuild);
+---
+{liveNotices.length > 0 && (
+  <section aria-label={t.noticesLabel} data-notice-region hidden={!anyVisible} class="border-b border-oxblood/20 bg-paper">
+    <ul class="container-x divide-y divide-oxblood/15">
+      {liveNotices.map((n) => (
+        <li data-start={n.start} data-end={n.end} hidden={!noticeVisibleAtBuild(n)} class="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3 text-[0.9375rem]">
+          <span aria-hidden="true" class="text-oxblood">{icon[n.type]}</span>
+          <strong class="font-serif text-base font-semibold text-oxblood">{tr(n, 'title', lang)}</strong>
+          <span class="text-ink">{tr(n, 'body', lang)}</span>
+          {n.link && <a class="font-semibold text-oxblood underline" href={href(n.link, lang)}>{t.readMore}<span class="sr-only">: {tr(n, 'title', lang)}</span></a>}
+          {n.is_example && <span class="tag-example">{t.example}</span>}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

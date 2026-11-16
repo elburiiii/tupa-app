@@ -1,0 +1,35 @@
+---
+import { UI, tr, fmtPrice, fmtWeight, href, type Lang } from '../lib/i18n';
+import type { Product } from '../lib/content';
+import ImagePlaceholder from './ImagePlaceholder.astro';
+interface Props { p: Product; lang: Lang }
+const { p, lang } = Astro.props;
+const t = UI[lang];
+const stampClass = { 'in-stock': 'stamp-ok', low: 'stamp-warn', 'sold-out': 'stamp-out' }[p.stock];
+const name = tr(p, 'name', lang);
+const unit = p.price_unit === 'kg' ? t.perKg : t.perPkg;
+const labelOn = t.addToCart;
+const labelOff = p.stock === 'sold-out' ? t.stock['sold-out'] : t.unavailable;
+const added = lang === 'fi' ? `${name} lisätty koriin` : `${name} added to cart`;
+---
+<article id={`product-${p.id}`} class="group flex scroll-mt-24 flex-col border border-oxblood/20 bg-cream/60 shadow-[4px_4px_0_rgb(90_26_31/0.12)]" aria-labelledby={`p-${p.id}`}>
+  <ImagePlaceholder label={tr(p, 'image_label', lang)} lang={lang} aspect="aspect-[3/2]" class="border-0 border-b" />
+  <div class="flex flex-1 flex-col p-5">
+    <div class="mb-3 flex flex-wrap items-center gap-2">
+      <span data-status-view="open"><span class:list={['stamp', stampClass]}>{t.stock[p.stock]}</span></span>
+      <span data-status-view="sold-out closed"><span class="stamp stamp-out">{t.unavailable}</span></span>
+      {p.is_example && <span class="tag-example">{t.example}</span>}
+    </div>
+    <h3 id={`p-${p.id}`} class="text-2xl text-ink">{name}</h3>
+    <p class="mt-2 text-ink-muted">{tr(p, 'desc', lang)}</p>
+    {p.cut && <a href={`${href('cuts', lang)}#${p.cut}`} class="mt-2 self-start text-sm font-semibold text-oxblood underline">{lang === 'fi' ? 'Katso leikkaus kaaviosta' : 'See the cut on the chart'}<span class="sr-only">: {name}</span></a>}
+    <dl class="mt-auto grid grid-cols-2 gap-3 border-t border-oxblood/15 pt-4 text-sm">
+      <div><dt class="eyebrow !text-[0.6875rem] text-ink-muted">{lang === 'fi' ? 'Hinta' : 'Price'}</dt><dd class="font-serif text-xl font-semibold tabular-nums text-oxblood">{fmtPrice(p.price, lang)}{unit}</dd></div>
+      <div><dt class="eyebrow !text-[0.6875rem] text-ink-muted">{t.weight}</dt><dd class="font-serif text-xl tabular-nums">{p.weight_min_g !== null && <span class="text-base">{t.approx} </span>}{fmtWeight(p.weight_min_g, p.weight_max_g, lang)}</dd></div>
+    </dl>
+    <button type="button" class="btn mt-5 w-full" data-add-to-cart={p.id} data-stock={p.stock}
+      data-label-on={labelOn} data-label-off={labelOff} data-added-msg={added} disabled={p.stock === 'sold-out'}>
+      <span data-btn-label>{p.stock === 'sold-out' ? labelOff : labelOn}</span><span class="sr-only">: {name}</span>
+    </button>
+  </div>
+</article>
